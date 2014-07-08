@@ -2,8 +2,8 @@
 
 import basePanel = require("../coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
 import utils = require("../../utils");
-import journal = require("./journalView");
 import tree = require("../coreplayer-treeviewleftpanel-module/treeView");
+import journalSortType = require("../../extensions/wellcomeplayer-seadragon-extension/journalSortType");
 
 export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
 
@@ -22,10 +22,14 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
 
         var manifestType = this.provider.getManifestType();
 
+        this.treeView = new tree.TreeView(this.$treeView);
+
         if (manifestType.toLowerCase() === "periodicalissue"){
-            this.treeView = new journal.JournalView(this.$treeView);
+            this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
         } else {
-            this.treeView = new tree.TreeView(this.$treeView);
+            this.treeView.rootNode = this.provider.getTree();
         }
+
+        this.treeView.dataBind();
     }
 }
