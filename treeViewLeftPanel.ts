@@ -50,6 +50,7 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
             }
 
             that.treeView.dataBind();
+            that.selectCurrentTreeNode();
         });
 
         this.$sortList.hide();
@@ -57,11 +58,9 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
 
     createTreeView(): void {
 
-        var manifestType = this.provider.getManifestType();
-
         this.treeView = new tree.TreeView(this.$treeView);
 
-        if (manifestType.toLowerCase() === "periodicalissue"){
+        if (this.isPeriodical()){
             this.$sortList.show();
             this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
         } else {
@@ -71,9 +70,21 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
         this.treeView.dataBind();
     }
 
+    isPeriodical(): boolean{
+        var manifestType = this.provider.getManifestType();
+        return manifestType.toLowerCase() === "periodicalissue";
+    }
+
     openTreeView(): void{
 
         this.$treeViewOptions.show();
+
+        var that = this;
+
+        setTimeout(() => {
+            that.selectCurrentTreeNode();
+        }, 1);
+
         super.resize();
         super.openTreeView();
     }
@@ -83,5 +94,22 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
         this.$treeViewOptions.hide();
         super.resize();
         super.openThumbsView();
+    }
+
+    selectCurrentTreeNode(): void{
+        // get the manifest structure
+        var structure = this.provider.sequence.structure;
+        if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
+    }
+
+    selectTreeNodeFromCanvasIndex(index: number): void {
+        // may be authenticating
+        if (index == -1) return;
+
+        if (this.isPeriodical()){
+            this.selectCurrentTreeNode();
+        } else {
+            super.selectTreeNodeFromCanvasIndex(index);
+        }
     }
 }
