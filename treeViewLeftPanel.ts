@@ -83,11 +83,14 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
 
         this.treeView = new tree.TreeView(this.$treeView);
 
+        this.updateTreeView();
+        this.updateTreeViewOptions();
+    }
+
+    updateTreeView(): void {
         if (this.isPeriodical()){
-            this.$treeViewOptions.show();
             this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
         } else {
-            this.$treeViewOptions.hide();
             this.treeView.rootNode = this.provider.getTree();
         }
 
@@ -99,11 +102,19 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
         return manifestType.toLowerCase() === "periodicalissue";
     }
 
+    updateTreeViewOptions(): void{
+        if (this.isPeriodical()){
+            this.$treeViewOptions.show();
+        } else {
+            this.$treeViewOptions.hide();
+        }
+    }
+
     openTreeView(): void{
 
-        this.$treeViewOptions.show();
-
         var that = this;
+
+        this.updateTreeViewOptions();
 
         setTimeout(() => {
             that.selectCurrentTreeNode();
