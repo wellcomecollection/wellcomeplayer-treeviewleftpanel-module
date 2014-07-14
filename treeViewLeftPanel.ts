@@ -87,6 +87,7 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
             this.$treeViewOptions.show();
             this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
         } else {
+            this.$treeViewOptions.hide();
             this.treeView.rootNode = this.provider.getTree();
         }
 
