@@ -9,7 +9,9 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
 
     $treeViewOptions: JQuery;
     $sortByLabel: JQuery;
-    $sortList: JQuery;
+    $buttonGroup: JQuery;
+    $sortByDateButton: JQuery;
+    $sortByVolumeButton: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -27,33 +29,54 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
         this.$sortByLabel = $('<span class="sort">Sort By:</span>');
         this.$treeViewOptions.append(this.$sortByLabel);
 
-        this.$sortList = $('<select>\
-                                <option value="date">Date</option>\
-                                <option value="volume">Volume</option>\
-                            </select>');
+        this.$buttonGroup = $('<div class="btn-group"></div>');
+        this.$treeViewOptions.append(this.$buttonGroup);
 
-        this.$treeViewOptions.append(this.$sortList);
+        this.$sortByDateButton = $('<button class="button">' + this.content.date + '</button>');
+        this.$buttonGroup.append(this.$sortByDateButton);
 
-        var that = this;
+        this.$sortByVolumeButton = $('<button class="button">' + this.content.volume + '</button>');
+        this.$buttonGroup.append(this.$sortByVolumeButton);
+
+//        this.$sortList = $('<select>\
+//                                <option value="date">Date</option>\
+//                                <option value="volume">Volume</option>\
+//                            </select>');
+//
+//        this.$treeViewOptions.append(this.$sortList);
+
+//        var that = this;
 
         // events
-        this.$sortList.on('change', function(e) {
-            var val = $(this).find('option:selected').val();
+//        this.$sortList.on('change', function(e) {
+//            var val = $(this).find('option:selected').val();
+//
+//            switch(val){
+//                case "date":
+//                    that.treeView.rootNode = that.provider.getJournalTree(journalSortType.JournalSortType.date);
+//                    break;
+//                case "volume":
+//                    that.treeView.rootNode = that.provider.getJournalTree(journalSortType.JournalSortType.volume);
+//                    break;
+//            }
+//
+//            that.treeView.dataBind();
+//            that.selectCurrentTreeNode();
+//        });
 
-            switch(val){
-                case "date":
-                    that.treeView.rootNode = that.provider.getJournalTree(journalSortType.JournalSortType.date);
-                    break;
-                case "volume":
-                    that.treeView.rootNode = that.provider.getJournalTree(journalSortType.JournalSortType.volume);
-                    break;
-            }
-
-            that.treeView.dataBind();
-            that.selectCurrentTreeNode();
+        this.$sortByDateButton.on('click', () => {
+            this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
+            this.treeView.dataBind();
+            this.selectCurrentTreeNode();
         });
 
-        this.$sortList.hide();
+        this.$sortByVolumeButton.on('click', () => {
+            this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.volume);
+            this.treeView.dataBind();
+            this.selectCurrentTreeNode();
+        });
+
+        this.$treeViewOptions.hide();
     }
 
     createTreeView(): void {
@@ -61,7 +84,7 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
         this.treeView = new tree.TreeView(this.$treeView);
 
         if (this.isPeriodical()){
-            this.$sortList.show();
+            this.$treeViewOptions.show();
             this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
         } else {
             this.treeView.rootNode = this.provider.getTree();
