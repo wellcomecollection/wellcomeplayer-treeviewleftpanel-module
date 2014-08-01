@@ -32,10 +32,10 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
         this.$buttonGroup = $('<div class="btn-group"></div>');
         this.$treeViewOptions.append(this.$buttonGroup);
 
-        this.$sortByDateButton = $('<button class="button">' + this.content.date + '</button>');
+        this.$sortByDateButton = $('<button class="btn">' + this.content.date + '</button>');
         this.$buttonGroup.append(this.$sortByDateButton);
 
-        this.$sortByVolumeButton = $('<button class="button">' + this.content.volume + '</button>');
+        this.$sortByVolumeButton = $('<button class="btn">' + this.content.volume + '</button>');
         this.$buttonGroup.append(this.$sortByVolumeButton);
 
 //        this.$sortList = $('<select>\
