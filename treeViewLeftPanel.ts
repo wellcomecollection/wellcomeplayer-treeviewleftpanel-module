@@ -134,6 +134,7 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
     selectCurrentTreeNode(): void{
         // get the manifest structure
         var structure = this.provider.sequence.structure;
+        if (!structure) return;
         if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
     }
 
