@@ -65,15 +65,11 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
 //        });
 
         this.$sortByDateButton.on('click', () => {
-            this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
-            this.treeView.dataBind();
-            this.selectCurrentTreeNode();
+            this.sortByDate();
         });
 
         this.$sortByVolumeButton.on('click', () => {
-            this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.volume);
-            this.treeView.dataBind();
-            this.selectCurrentTreeNode();
+            this.sortByVolume();
         });
 
         this.$treeViewOptions.hide();
@@ -87,14 +83,29 @@ export class TreeViewLeftPanel extends basePanel.TreeViewLeftPanel {
         this.updateTreeViewOptions();
     }
 
+    sortByDate(): void {
+        this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
+        this.treeView.dataBind();
+        this.selectCurrentTreeNode();
+        this.$sortByDateButton.addClass('on');
+        this.$sortByVolumeButton.removeClass('on');
+    }
+
+    sortByVolume(): void {
+        this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.volume);
+        this.treeView.dataBind();
+        this.selectCurrentTreeNode();
+        this.$sortByDateButton.removeClass('on');
+        this.$sortByVolumeButton.addClass('on');
+    }
+
     updateTreeView(): void {
         if (this.isPeriodical()){
-            this.treeView.rootNode = this.provider.getJournalTree(journalSortType.JournalSortType.date);
+            this.sortByDate();
         } else {
             this.treeView.rootNode = this.provider.getTree();
+            this.treeView.dataBind();
         }
-
-        this.treeView.dataBind();
     }
 
     isPeriodical(): boolean{
